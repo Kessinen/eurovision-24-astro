@@ -1,5 +1,17 @@
 # Eurovision 24 homestudio
 
+## Installation
+
+To install the dependencies, run `npm install`.
+
+To start the development server, run `npm run dev`.
+
+Requires enviromental variables:
+
+| Variable | Description |
+| :------ | :--------- |
+| `API_URL` | Url for the Eurovision 24 api server. |
+
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
