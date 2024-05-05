@@ -1,0 +1,47 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+
+export const api_url = import.meta.env.API_URL;
+
+const { url } = Astro.request;
+const round_num = url.split("/")[url.split("/").length - 1];
+
+type Participant = {
+    id: number;
+    year: number;
+    country: string;
+    country_img: string;
+    name: string;
+    song: string;
+    img: string;
+    url: string;
+    round_num: number;
+    turn: number;
+};
+const participants = await fetch(api_url + "/participant/round/" + round_num);
+const participant_data: Participant[] = await participants.json();
+---
+
+<Layout title="Eurovision 24 homestudio">
+    {
+        participant_data.map((participant) => (
+            <a href="">
+                <section class="flex flex-1 mb-5 border rounded-xl p-4 shadow gap-5 items-center">
+                    <div class="text-3xl w-16 text-center">
+                        {participant.turn}
+                    </div>
+                    <div>
+                        <ul>
+                            <li>{participant.country}</li>
+                            <li>
+                                {participant.name} - {participant.song}
+                            </li>
+                        </ul>
+                    </div>
+                    <div />
+                </section>
+            </a>
+        ))
+    }
+</Layout>

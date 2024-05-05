@@ -1,6 +1,4 @@
 ---
-import Navbar from "../components/Navbar.astro";
-
 interface Props {
 	title: string;
 }
@@ -16,12 +14,13 @@ const { title = "Eurovision homestudio" } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+		/>
 		<title>{title}</title>
 	</head>
 	<body class="min-h-screen">
-		<Navbar />
-		<div class="container">
-			<slot />
-		</div>
+		<slot />
 	</body>
 </html>
