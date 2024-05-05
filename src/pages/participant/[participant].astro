@@ -1,0 +1,87 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+
+export const api_url = import.meta.env.API_URL;
+
+const { participant } = Astro.params;
+
+const raw_participant_data = await fetch(
+    api_url + "/participant/" + participant,
+).then((res) => res.json());
+
+const participant_data = raw_participant_data[0];
+
+console.log(participant_data);
+---
+
+<Layout title="Eurovision 24 homestudio">
+    <div class="w-96 p-6 shadow-2xl bg-slate-50 border-2 border-slate-200 rounded-md mx-auto">
+        <h1 class="text-3xl block text-center font-semibold mb-5 w-full">
+            {participant_data.country}
+        </h1>
+        <img src={participant_data.img} alt=""  class="border-2 rounded-xl border-slate-200 opacity-80"/>
+        <div class="text-center py-5">
+            <p>{participant_data.name}</p><p>{participant_data.song}</p>
+        </div>
+
+        <div>
+            <form method="post">
+                <div class="flex gap-5 w-full text-center">
+                    <div>
+                        <label for="melody" class="block text-base mb-2"
+                            >Melodia</label
+                        >
+                        <input
+                            type="number"
+                            name="melody"
+                            id="melody"
+                            min="4"
+                            max="10"
+                            value="0"
+                            class="border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600 text-center"
+                        />
+                    </div>
+                    <div>
+                        <label for="performance" class="block text-base mb-2"
+                            >Esitys</label
+                        >
+                        <input
+                            type="number"
+                            name="performance"
+                            id="performance"
+                            min="4"
+                            max="10"
+                            value="0"
+                            class="border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600 text-center"
+                        />
+                    </div>
+                    <div>
+                        <label for="wardrobe" class="block text-base mb-2"
+                            >Vaatetus</label
+                        >
+                        <input
+                            type="number"
+                            name="wardrobe"
+                            id="wardrobe"
+                            min="4"
+                            max="10"
+                            value="0"
+                            class="border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600 text-center"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <input
+                        type="submit"
+                        value="Tallenna"
+                        class="border-2 border-indigo-700 bg-indigo-700 text-white px-2 py-1 w-full mt-5 rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold"
+                    />
+                </div>
+            </form>
+            <div class="text-center">
+                <button onclick="history.back()" class="mt-3 p-2 bg-slate-200">Go Back</button>
+            </div>
+        </div>
+    </div>
+</Layout>
