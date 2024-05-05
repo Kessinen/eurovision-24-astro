@@ -7,13 +7,11 @@ const api_key = Astro.cookies.get("apikey");
 ---
 
 <header class="mb-5 bg-slate-600 p-3 text-slate-200">
-    <nav class="flex justify-between">
-        <a href="/" class="navbar-brand text-xl font-semibold"
-            >Eurovision 24 homestudio</a
-        >
-        <ul
-            class="flex flex-1 justify-center items-center gap-16 max-lg:hidden"
-        >
+    <nav class="flex justify-between align-middle">
+        <a href="/" class="navbar-brand font-semibold flex">
+            <img src="/public/e24hs.png" alt="E24hs logo" class="w-12 rounded-full"><p class="self-center ml-3">E24hs</p>
+        </a>
+        <ul class="flex flex-1 justify-center items-center gap-16 max-lg:hidden">
             {
                 day == 7 && api_key && (
                     <li>
@@ -38,15 +36,15 @@ const api_key = Astro.cookies.get("apikey");
         </ul>
         {
             api_key && (
-                <a href="/logout" class="">
-                    Kirjaudu ulos
+                <a href="/logout" class="self-center">
+                    <img src="/public/power-off.svg" alt="" class="w-6">
                 </a>
             )
         }
         {
             !api_key && (
-                <a href="/login" class="">
-                    Kirjaudu
+                <a href="/login" class="self-center">
+                    <img src="/public/power-off.svg" alt="" class="w-6 border-2 rounded-full p-4">
                 </a>
             )
         }
