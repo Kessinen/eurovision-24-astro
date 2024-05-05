@@ -18,7 +18,10 @@ if (Astro.request.method === "POST") {
             body: JSON.stringify({ username, password }),
         });
         const respdata = await res.json();
-        console.log(respdata);
+        if (respdata["apikey"]) {
+            Astro.cookies.set("apikey", respdata["apikey"]);
+            return Astro.redirect("/");
+        }
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);

@@ -1,0 +1,6 @@
+---
+if (Astro.cookies.get("apikey")) {
+    Astro.cookies.delete("apikey");
+    return Astro.redirect("/");
+}
+---
