@@ -1,8 +1,16 @@
-FROM node:lts AS runtime
+FROM node:latest AS runtime
 WORKDIR /app
 
-copy . .
+COPY . .
+
+ENV ASTRO_DATABASE_FILE=/app/data/astro.db
 
 RUN npm install
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+ENV HOST=0.0.0.0
+ENV PORT=4321
+EXPOSE 4321
+CMD node ./dist/server/entry.mjs --verbose
+
+
