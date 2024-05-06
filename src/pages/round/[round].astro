@@ -1,9 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Navbar from "../../components/Navbar.astro";
 
 import { db, like, Participants } from 'astro:db'
-import Participant from "../participant/[participant].astro";
 
 const { round } = Astro.params;
 
@@ -11,7 +9,7 @@ if (!round || !["1", "2", "3"].includes(round)) {
     return Astro.redirect("/404");
 }
 
-Astro.cookies.set("round", round);
+Astro.cookies.set("round", round, { path: "/" });
 
 const participants = await db.select().from(Participants).where(like(Participants.round_num, round)).orderBy(Participants.turn);
 
