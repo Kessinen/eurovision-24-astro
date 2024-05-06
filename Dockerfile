@@ -5,6 +5,8 @@ COPY . .
 
 ENV ASTRO_DATABASE_FILE=/data/astro.db
 
+RUN mkdir -p /data
+
 RUN npm install
 RUN npm run build
 
