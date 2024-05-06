@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY . .
 
-ENV ASTRO_DATABASE_FILE=/app/data/astro.db
+ENV ASTRO_DATABASE_FILE=/data/astro.db
 
 RUN npm install
 RUN npm run build
