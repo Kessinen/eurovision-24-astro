@@ -7,7 +7,6 @@ if (Astro.request.method === "POST") {
         const data = await Astro.request.formData();
         const username = data.get("username") as string;
         const password = data.get("password") as string;
-        console.log(username, password);
 
         const user = await db.select().from(Users).where(and(eq(Users.username, username), eq(Users.password, password)));
 
