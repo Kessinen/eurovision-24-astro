@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/Navbar.astro";
 
-import { db, like, eq, Participants, Reviews } from 'astro:db'
+import { db, like, eq, and, Participants, Reviews } from 'astro:db'
 
 const { participant } = Astro.params;
 
@@ -13,6 +13,15 @@ if (participant != undefined) {
     return Astro.redirect("/404");
 }
 
+// Check if user logged in
+const check_login = Astro.cookies.get("logged_user");
+let user_id = null
+if (!check_login) {
+    return Astro.redirect("/login");
+} else {
+    user_id = parseInt(Astro.cookies.get("logged_user")["value"]);
+}
+
 const raw_participant_data = await db.select().from(Participants).where(eq(Participants.id, participant_id));
 
 const participant_data = raw_participant_data[0];
@@ -21,6 +30,17 @@ let participant_score = {
     melody: "0",
     performance: "0",
     wardrobe: "0"
+}
+
+// Check if participant has already reviewed
+const participant_review = await db.select().from(Reviews).where(eq(Reviews.participant_id, participant_id) && eq(Reviews.user_id, user_id));
+
+if (participant_review.length > 0) {
+    participant_score = {
+        melody: participant_review[0].melody.toString(),
+        performance: participant_review[0].performance.toString(),
+        wardrobe: participant_review[0].wardrobe.toString()
+    }
 }
 
 if (Astro.request.method === "POST") {
@@ -60,13 +80,6 @@ if (Astro.request.method === "POST") {
 
 }
 
-   
-const logged_user_id = Astro.cookies.get("logged_user");
-
-if (!logged_user_id) {
-    return Astro.redirect("/login");
-}
-
 ---
 
 <Layout title="Eurovision 24 homestudio">
@@ -88,7 +101,7 @@ if (!logged_user_id) {
         <div>
             <form method="post">
                 <input type="hidden" name="participant_id" value={participant_id} />
-                <input type="hidden" name="user_id" value={logged_user_id["value"]} />
+                <input type="hidden" name="user_id" value={user_id} />
                 <input type="hidden" name="round_num" value="1" />
                 <div class="flex gap-5 w-full text-center">
                     <div>
