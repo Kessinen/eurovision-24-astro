@@ -3,48 +3,44 @@ const date = new Date();
 
 const day = date.getDate();
 
-const api_key = Astro.cookies.get("apikey");
+const is_logged = Astro.cookies.get("logged_user");
 ---
 
 <header class="mb-5 bg-slate-600 p-3 text-slate-200">
     <nav class="flex justify-between align-middle">
         <a href="/" class="navbar-brand font-semibold flex">
-            <img src="/e24hs.png" alt="E24hs logo" class="w-12 rounded-full"><p class="self-center ml-3">E24hs</p>
+            <img
+                src="/e24hs.png"
+                alt="E24hs logo"
+                class="w-12 rounded-full"
+            /><p class="self-center ml-3">E24hs</p>
         </a>
-        <ul class="flex flex-1 justify-center items-center gap-16 max-lg:hidden">
-            {
-                day == 7 && api_key && (
-                    <li>
-                        <a href="/round/1">1. Semifinaali</a>
-                    </li>
-                )
-            }
-            {
-                day == 9 && api_key && (
-                    <li>
-                        <a href="/round/2">2. Semifinaali</a>
-                    </li>
-                )
-            }
-            {
-                day == 11 && api_key && (
-                    <li>
-                        <a href="/round/3">Finaali</a>
-                    </li>
-                )
-            }
+        <ul
+            class="flex flex-1 justify-center items-center gap-16 max-lg:hidden">
+            <li>
+                <a href="/round/1">1. Semifinaali</a>
+            </li>
+            <li>
+                <a href="/round/2">2. Semifinaali</a>
+            </li>
+            <li>
+                <a href="/round/3">Finaali</a>
+            </li>
         </ul>
         {
-            api_key && (
+            is_logged && (
                 <a href="/logout" class="self-center">
-                    <img src="/power-off.svg" alt="" class="w-6">
+                    <img src="/power-off.svg" alt="" class="w-6" />
                 </a>
             )
         }
         {
-            !api_key && (
+            !is_logged && (
                 <a href="/login" class="self-center">
-                    <img src="/power-off.svg" alt="" class="w-6 border-2 rounded-full p-4">
+                    <img
+                        src="/power-off.svg"
+                        alt=""
+                        class="w-6 border-2 rounded-full p-4"/>
                 </a>
             )
         }

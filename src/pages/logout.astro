@@ -1,6 +1,6 @@
 ---
-if (Astro.cookies.get("apikey")) {
-    Astro.cookies.delete("apikey");
-    return Astro.redirect("/");
+if (Astro.cookies.get("logged_user")) {
+    Astro.cookies.delete("logged_user");
 }
+return Astro.redirect("/");
 ---

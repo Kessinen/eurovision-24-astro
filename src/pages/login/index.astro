@@ -1,32 +1,29 @@
 ---
 import Layout from "../../layouts/LoginLayout.astro";
-
-const api_url_base = import.meta.env.API_URL;
-
-const login_url = api_url_base + "/user/login";
+import { db, eq, and, Users } from 'astro:db'
 
 if (Astro.request.method === "POST") {
     try {
         const data = await Astro.request.formData();
-        const username = data.get("username");
-        const password = data.get("password");
-        const res = await fetch(login_url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username, password }),
-        });
-        const respdata = await res.json();
-        if (respdata["apikey"]) {
-            Astro.cookies.set("apikey", respdata["apikey"]);
-            return Astro.redirect("/");
+        const username = data.get("username") as string;
+        const password = data.get("password") as string;
+        console.log(username, password);
+
+        const user = await db.select().from(Users).where(and(eq(Users.username, username), eq(Users.password, password)));
+
+        if (user.length == 0) {
+            return Astro.redirect("/login");
         }
+
+        Astro.cookies.set("logged_user", user[0].id.toString());
+
+        return Astro.redirect("/");
+    
+
     } catch (error) {
-        if (error instanceof Error) {
-            console.error(error.message);
-        }
+        console.log(error);
     }
+
 }
 ---
 
