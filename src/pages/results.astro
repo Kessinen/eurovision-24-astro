@@ -17,6 +17,7 @@ import {
 const participants = await db
     .select({
         id: Participants.id,
+        country: Participants.country,
         name: Participants.name,
         song: Participants.song,
         country_img: Participants.country_img,
@@ -39,6 +40,7 @@ for (let i = 0; i < results.length; i++) {
     let result = results[i];
     const tmp_result = {
         Artist: participants[result.Participant_id - 1].name,
+        Country: participants[result.Participant_id - 1].country,
         Song: participants[result.Participant_id - 1].song,
         Image: participants[result.Participant_id - 1].country_img,
         scores: {
@@ -62,15 +64,6 @@ const best_melodies = Object.values(final_results).map( value => value).sort((a,
 const best_wardrobes = Object.values(final_results).map( value => value).sort((a, b) => b.scores.wardrobe - a.scores.wardrobe);
 const best_performances = Object.values(final_results).map( value => value).sort((a, b) => b.scores.performance - a.scores.performance);
 
-
-
-
-// console.log("final_results", final_results);
-console.log("pippeli", best_melodies);
-// console.log("sort_by_melody", sort_by_melody);
-// console.log("sort_by_performance", sort_by_performance);
-// console.log("sort_by_wardrobe", sort_by_wardrobe);
-
 ---
 
 <Layout title="Eurovision 24 homestudio">
@@ -79,14 +72,14 @@ console.log("pippeli", best_melodies);
     <div
         class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
         <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Artist</div>
-        <div class="font-semibold bg-slate-300">Song</div>
-        <div class="font-semibold bg-slate-300">Score</div>
+        <div class="font-semibold bg-slate-300">Maa</div>
+        <div class="font-semibold bg-slate-300">Kappale</div>
+        <div class="font-semibold bg-slate-300">Tulos</div>
         {
             final_results.map((result, index) => (
                     <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{result.Artist}</div>
-                    <div class="border-b-2">{result.Song}</div>
+                    <div class="border-b-2">{result.Country}</div>
+                    <div class="border-b-2">{result.Artist} - {result.Song}</div>
                     <div class="border-b-2">{result.scores.total.toFixed(2)}</div>
             ))
         }
@@ -97,14 +90,14 @@ console.log("pippeli", best_melodies);
     <div
         class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
         <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Artist</div>
-        <div class="font-semibold bg-slate-300">Song</div>
-        <div class="font-semibold bg-slate-300">Score</div>
+        <div class="font-semibold bg-slate-300">Maa</div>
+        <div class="font-semibold bg-slate-300">Kappale</div>
+        <div class="font-semibold bg-slate-300">Tulos</div>
         {
             best_performances.map((score, index) => (
                     <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{score.Artist}</div>
-                    <div class="border-b-2">{score.Song}</div>
+                    <div class="border-b-2">{score.Country}</div>
+                    <div class="border-b-2">{score.Artist} - {score.Song}</div>
                     <div class="border-b-2">{score.scores.performance.toFixed(2)}</div>
             ))
         }
@@ -115,14 +108,14 @@ console.log("pippeli", best_melodies);
     <div
         class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
         <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Artist</div>
-        <div class="font-semibold bg-slate-300">Song</div>
-        <div class="font-semibold bg-slate-300">Score</div>
+        <div class="font-semibold bg-slate-300">Maa</div>
+        <div class="font-semibold bg-slate-300">Kappale</div>
+        <div class="font-semibold bg-slate-300">Tulos</div>
         {
             best_melodies.map((score, index) => (
                     <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{score.Artist}</div>
-                    <div class="border-b-2">{score.Song}</div>
+                    <div class="border-b-2">{score.Country}</div>
+                    <div class="border-b-2">{score.Artist} - {score.Song}</div>
                     <div class="border-b-2">{score.scores.melody.toFixed(2)}</div>
             ))
         }
@@ -133,14 +126,14 @@ console.log("pippeli", best_melodies);
     <div
         class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
         <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Artist</div>
-        <div class="font-semibold bg-slate-300">Song</div>
-        <div class="font-semibold bg-slate-300">Score</div>
+        <div class="font-semibold bg-slate-300">Maa</div>
+        <div class="font-semibold bg-slate-300">Kappale</div>
+        <div class="font-semibold bg-slate-300">Tulos</div>
         {
             best_wardrobes.map((score, index) => (
                     <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{score.Artist}</div>
-                    <div class="border-b-2">{score.Song}</div>
+                    <div class="border-b-2">{score.Country}</div>
+                    <div class="border-b-2">{score.Artist} - {score.Song}</div>
                     <div class="border-b-2">{score.scores.wardrobe.toFixed(2)}</div>
             ))
         }
@@ -151,6 +144,6 @@ console.log("pippeli", best_melodies);
 
 <style>
     .results-table {
-        grid-template-columns: 1fr 3fr 3fr 1fr;
+        grid-template-columns: 1fr 2fr 4fr 1fr;
     }
 </style>
