@@ -13,15 +13,14 @@ const Users = defineTable({
 const Participants = defineTable({
   columns: {
     id: column.number({ primaryKey: true }),
+    turn: column.number(),
     year: column.number(),
     country: column.text(),
     country_img: column.text(),
     name: column.text(),
     song: column.text(),
     img: column.text(),
-    url: column.text(),
-    round_num: column.number(),
-    turn: column.number()
+    artist_url: column.text()
   }
 })
 
