@@ -1,0 +1,52 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { db, eq, Users } from "astro:db";
+
+// Check if user login and isadmin
+const check_login = Astro.cookies.get("logged_user") || null;
+if (!check_login) {
+  return Astro.redirect("/login");
+}
+const result = await db
+  .select()
+  .from(Users)
+  .where(eq(Users.id, parseInt(check_login["value"] as string)));
+if (!result[0].isAdmin) {
+  return Astro.redirect("/");
+}
+
+if (Astro.request.method === "POST") {
+  const data = await Astro.request.formData();
+  const username = (data.get("username") as string).toLowerCase();
+  const password = (data.get("username") as string).toLowerCase();
+  // Check if user exists
+  const result = await db.select().from(Users).where(eq(Users.username, username))
+  if (result.length < 0) {
+    const add_user = await db.insert(Users).values({
+      username: username,
+      password: username,
+    })
+  }
+  return Astro.redirect("/admin");
+}
+---
+
+<Layout title="Eurovision 24 homestudio">
+  <h1 class="text-3xl font-bold mb-10">Admin panel</h1>
+  <div class="w-96 p-6 shadow-lg bg-white rounded-md mx-auto">
+    <form method="POST">
+      <label for="username" class="block text-base mb-2">Käyttäjä</label>
+      <input
+        type="text"
+        name="username"
+        id="username"
+        placeholder="Username"
+        class="w-full border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600 mb-10"/>
+      <button
+        type="submit"
+        class="border-2 border-indigo-700 bg-indigo-700 text-white px-2 py-1 w-full mt-5 rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold">
+        Add user
+      </button>
+    </form>
+  </div>
+</Layout>
