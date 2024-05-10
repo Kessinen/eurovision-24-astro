@@ -29,7 +29,6 @@ const Reviews = defineTable({
     id: column.number({ primaryKey: true }),
     user_id: column.number({ references: () => Users.columns.id }),
     participant_id: column.number({ references: () => Participants.columns.id }),
-    round_num: column.number(),
     melody: column.number(),
     performance: column.number(),
     wardrobe: column.number()

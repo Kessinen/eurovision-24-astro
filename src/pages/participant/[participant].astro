@@ -22,15 +22,6 @@ if (check_login) {
     return Astro.redirect("/login");
 }
 
-// Check if round cookie set
-const round = Astro.cookies.get("round");
-let back_link = ""
-if (!round || !["1", "2", "3"].includes(round["value"])) {
-    return Astro.redirect("/");
-} else {
-    back_link = "/round/" + round["value"];
-}
-
 const raw_participant_data = await db.select().from(Participants).where(eq(Participants.id, participant_id));
 
 const participant_data = raw_participant_data[0];
@@ -71,7 +62,6 @@ if (Astro.request.method === "POST") {
             {
                 user_id: parseInt(data.get("user_id") as string),
                 participant_id: participant_id,
-                round_num: parseInt(data.get("round_num") as string),
                 melody: parseInt(participant_score.melody),
                 performance: parseInt(participant_score.performance),
                 wardrobe: parseInt(participant_score.wardrobe)
@@ -161,7 +151,7 @@ if (Astro.request.method === "POST") {
                 </div>
             </form>
             <div class="text-center mt-5">
-                <a href={ back_link } class="p-2 bg-slate-200 hover:bg-transparent hover:border-2 rounded-sm"
+                <a href="/participant_list" class="p-2 bg-slate-200 hover:bg-transparent hover:border-2 rounded-sm"
                     >Palaa</a>
             </div>
         </div>
