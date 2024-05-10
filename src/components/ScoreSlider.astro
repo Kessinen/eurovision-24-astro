@@ -1,0 +1,15 @@
+---
+const { score_name, score_tag,  min_value = 1, max_value = 100, cur_value = ((max_value - min_value)/2+min_value) } = Astro.props
+const half_score = parseInt((max_value - min_value)/2+min_value)
+---
+<div class="py-3 text-center">
+    <p class="mb-3">{score_name}:</p>
+    <input class="w-full rounded-md bg-slate-300 appearance-none cursor-pointer" id={score_tag} name={score_tag} type="range" min={min_value} max={max_value} value={cur_value} />
+    <div class="flex justify-between">
+        <div class="slider-legend text-slate-700 w-6 text-left">{min_value}</div>
+        <div class="slider-legend text-slate-300 w-6 text-center">|</div>
+        <div class="slider-legend text-slate-700 w-6 text-center">{half_score}</div>
+        <div class="slider-legend text-slate-300 w-6 text-center">|</div>
+        <div class="slider-legend text-slate-700 w-6 text-right">{max_value}</div>
+    </div>
+</div>

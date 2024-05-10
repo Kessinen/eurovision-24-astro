@@ -1,173 +1,147 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Navbar from "../../components/Navbar.astro";
+import ScoreSlider from "../../components/ScoreSlider.astro";
 
-import { db, like, eq, and, Participants, Reviews } from 'astro:db'
+import { db, like, eq, and, Participants, Reviews } from "astro:db";
 
 const { participant } = Astro.params;
 
-let participant_id = null
+let participant_id = null;
 if (participant != undefined) {
-    participant_id = parseInt(participant);
+  participant_id = parseInt(participant);
 } else {
-    return Astro.redirect("/404");
+  return Astro.redirect("/404");
 }
 
 // Check if user logged in
 const check_login = Astro.cookies.get("logged_user");
-let user_id = null
+let user_id = null;
 if (check_login) {
-    user_id = parseInt(check_login["value"]);
+  user_id = parseInt(check_login["value"]);
 } else {
-    return Astro.redirect("/login");
+  return Astro.redirect("/login");
 }
 
-const raw_participant_data = await db.select().from(Participants).where(eq(Participants.id, participant_id));
+const raw_participant_data = await db
+  .select()
+  .from(Participants)
+  .where(eq(Participants.id, participant_id));
 
 const participant_data = raw_participant_data[0];
 
 let participant_score = {
-    melody: "0",
-    performance: "0",
-    wardrobe: "0"
-}
+  melody: "0",
+  performance: "0",
+  wardrobe: "0",
+};
 
 // Check if participant has already reviewed
-const participant_review = await db.select().from(Reviews).where(and(eq(Reviews.participant_id, participant_id), eq(Reviews.user_id, user_id)));
+const participant_review = await db
+  .select()
+  .from(Reviews)
+  .where(
+    and(
+      eq(Reviews.participant_id, participant_id),
+      eq(Reviews.user_id, user_id)
+    )
+  );
 
 if (participant_review.length > 0) {
-    participant_score = {
-        melody: participant_review[0].melody.toString(),
-        performance: participant_review[0].performance.toString(),
-        wardrobe: participant_review[0].wardrobe.toString()
-    }
+  participant_score = {
+    melody: participant_review[0].melody.toString(),
+    performance: participant_review[0].performance.toString(),
+    wardrobe: participant_review[0].wardrobe.toString(),
+  };
 }
 
 if (Astro.request.method === "POST") {
-    const data = await Astro.request.formData();
-    if (data.get("melody")) {
-        participant_score.melody = data.get("melody") as string;
-    }
-    if (data.get("performance")) {
-        participant_score.performance = data.get("performance") as string;
-    }
-    if (data.get("wardrobe")) {
-        participant_score.wardrobe = data.get("wardrobe") as string;
-    }
+  const data = await Astro.request.formData();
+  if (data.get("melody")) {
+    participant_score.melody = data.get("melody") as string;
+  }
+  if (data.get("performance")) {
+    participant_score.performance = data.get("performance") as string;
+  }
+  if (data.get("wardrobe")) {
+    participant_score.wardrobe = data.get("wardrobe") as string;
+  }
 
-
-    if (participant_review.length == 0) {
-        console.log("inserting review");
-        await db.insert(Reviews).values([
-            {
-                user_id: parseInt(data.get("user_id") as string),
-                participant_id: participant_id,
-                melody: parseInt(participant_score.melody),
-                performance: parseInt(participant_score.performance),
-                wardrobe: parseInt(participant_score.wardrobe)
-            }
-        ])
-    } else {
-        console.log("updating review");
-        await db.update(Reviews).set({
-            melody: parseInt(participant_score.melody),
-            performance: parseInt(participant_score.performance),
-            wardrobe: parseInt(participant_score.wardrobe)
-        }).where(eq(Reviews.participant_id, participant_id) && eq(Reviews.user_id, parseInt(data.get("user_id") as string)))
-    }
-    return Astro.redirect("/participant_list");
+  if (participant_review.length == 0) {
+    console.log("inserting review");
+    await db.insert(Reviews).values([
+      {
+        user_id: parseInt(data.get("user_id") as string),
+        participant_id: participant_id,
+        melody: parseInt(participant_score.melody),
+        performance: parseInt(participant_score.performance),
+        wardrobe: parseInt(participant_score.wardrobe),
+      },
+    ]);
+  } else {
+    console.log("updating review");
+    await db
+      .update(Reviews)
+      .set({
+        melody: parseInt(participant_score.melody),
+        performance: parseInt(participant_score.performance),
+        wardrobe: parseInt(participant_score.wardrobe),
+      })
+      .where(
+        eq(Reviews.participant_id, participant_id) &&
+          eq(Reviews.user_id, parseInt(data.get("user_id") as string))
+      );
+  }
+  return Astro.redirect("/participant_list");
 }
-
 ---
 
 <Layout title="Eurovision 24 homestudio">
-    <div
-        class="w-96 p-6 shadow-2xl bg-slate-50 border-2 border-slate-200 rounded-md mx-auto"
-    >
-        <h1 class="text-3xl block text-center font-semibold mb-5 w-full">
-            {participant_data.country}
-        </h1>
-        <img
-            src={participant_data.img}
-            alt={participant_data.country}
-            class="border-2 rounded-xl border-slate-200 opacity-80"
-        />
-        <div class="text-center py-5">
-            <p>{participant_data.name}</p><p>{participant_data.song}</p>
-        </div>
-
-        <div>
-            <form method="post">
-                <input type="hidden" name="participant_id" value={participant_id} />
-                <input type="hidden" name="user_id" value={user_id} />
-                <input type="hidden" name="round_num" value="1" />
-                <div class="flex gap-5 w-full text-center">
-                    <div>
-                        <label for="melody" class="block text-base mb-2"
-                            >Melodia</label>
-                        <input
-                            type="number"
-                            name="melody"
-                            id="melody"
-                            min="1"
-                            max="10"
-                            value={participant_score.melody}
-                            class="border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600 text-center"
-                        />
-                    </div>
-                    <div>
-                        <label for="performance" class="block text-base mb-2"
-                            >Esitys</label>
-                        <input
-                            type="number"
-                            name="performance"
-                            id="performance"
-                            min="1"
-                            max="10"
-                            value={participant_score.performance}
-                            class="border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600 text-center"
-                        />
-                    </div>
-                    <div>
-                        <label for="wardrobe" class="block text-base mb-2"
-                            >Vaatetus</label>
-                        <input
-                            type="number"
-                            name="wardrobe"
-                            id="wardrobe"
-                            min="1"
-                            max="10"
-                            value={participant_score.wardrobe}
-                            class="border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600 text-center"
-                        />
-                    </div>
-                </div>
-                <div>
-                    <input
-                        type="submit"
-                        value="Tallenna"
-                        class="border-2 border-indigo-700 bg-indigo-700 text-white px-2 py-1 w-full mt-5 rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold"
-                    />
-                </div>
-            </form>
-            <div class="text-center mt-5">
-                <a href="/participant_list" class="p-2 bg-slate-200 hover:bg-transparent hover:border-2 rounded-sm"
-                    >Palaa</a>
-            </div>
-        </div>
+  <div
+    class="w-96 p-6 shadow-2xl bg-slate-50 border-2 border-slate-200 rounded-md mx-auto">
+    <h1 class="text-3xl block text-center font-semibold mb-5 w-full">
+      {participant_data.country}
+    </h1>
+    <img
+      src={participant_data.img}
+      alt={participant_data.country}
+      class="border-2 rounded-xl border-slate-200 opacity-80"
+    />
+    <div class="text-center py-5">
+      <p>{participant_data.name}</p><p>{participant_data.song}</p>
     </div>
+
+    <div>
+      <form method="post">
+        <input type="hidden" name="participant_id" value={participant_id} />
+        <input type="hidden" name="user_id" value={user_id} />
+        <ScoreSlider score_name="Melodia" score_tag="melody" cur_value={participant_score.melody}/>
+        <ScoreSlider score_name="Esitys" score_tag="performance" cur_value={participant_score.performance}/>
+        <ScoreSlider score_name="Vaatetus" score_tag="wardrobe" cur_value={participant_score.wardrobe}/>
+        <div>
+          <input
+            type="submit"
+            value="Tallenna"
+            class="border-2 border-indigo-700 bg-indigo-700 text-white px-2 py-1 w-full mt-5 rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold"/>
+        </div>
+      </form>
+      <div class="text-center mt-5">
+        <a
+          href="/participant_list"
+          class="p-2 bg-slate-200 hover:bg-transparent hover:border-2 rounded-sm"
+          >Palaa</a>
+      </div>
+    </div>
+  </div>
 </Layout>
 
 <script>
-    const fields = document.querySelectorAll("input");
-    fields.forEach((field) => {
-
-        if (field.type === "number") {
-            field.addEventListener("click", () => {
-                field.select();
-            });
-        }
-    })
-    console.log(fields);
-
+  const fields = document.querySelectorAll("input");
+  fields.forEach((field) => {
+    if (field.type === "number") {
+      field.addEventListener("click", () => {
+        field.select();
+      });
+    }
+  });
+  console.log(fields);
 </script>
