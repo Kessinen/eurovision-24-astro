@@ -31,7 +31,7 @@ All commands are run from the root of the project, from a terminal:
 - [x] Remove semifinals from the app. Reviewing of finals is all that is needed.
 - [ ] In partisipants view the review score should be selected when input field is focused.
 - [x] Goto participant listing after a review is given
-- [ ] Results screen
+- [x] Results screen
 - [ ] Admin panel
   - [ ] Add new user
   - [ ] Reset password (If time to implement)
