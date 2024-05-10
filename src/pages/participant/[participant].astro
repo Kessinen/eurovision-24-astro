@@ -157,3 +157,17 @@ if (Astro.request.method === "POST") {
         </div>
     </div>
 </Layout>
+
+<script>
+    const fields = document.querySelectorAll("input");
+    fields.forEach((field) => {
+
+        if (field.type === "number") {
+            field.addEventListener("click", () => {
+                field.select();
+            });
+        }
+    })
+    console.log(fields);
+
+</script>
