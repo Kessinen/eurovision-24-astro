@@ -1,0 +1,156 @@
+---
+import { sumDistinct } from "astro:db";
+import Layout from "../layouts/Layout.astro";
+import {
+    db,
+    like,
+    eq,
+    and,
+    count,
+    sum,
+    sql,
+    avg,
+    Participants,
+    Reviews,
+} from "astro:db";
+
+const participants = await db
+    .select({
+        id: Participants.id,
+        name: Participants.name,
+        song: Participants.song,
+        country_img: Participants.country_img,
+    })
+    .from(Participants)
+    .orderBy(Participants.id);
+const results = await db
+    .select({
+        Participant_id: Reviews.participant_id,
+        number_of_reviews: count(Reviews.id),
+        melody_score: avg(Reviews.melody),
+        performance_score: avg(Reviews.performance),
+        wardrobe_score: avg(Reviews.wardrobe),
+    })
+    .from(Reviews)
+    .groupBy(Reviews.participant_id);
+
+let final_results = [];
+for (let i = 0; i < results.length; i++) {
+    let result = results[i];
+    const tmp_result = {
+        Artist: participants[result.Participant_id - 1].name,
+        Song: participants[result.Participant_id - 1].song,
+        Image: participants[result.Participant_id - 1].country_img,
+        scores: {
+            melody: parseFloat(result.melody_score as string),
+            performance: parseFloat(result.performance_score as string),
+            wardrobe: parseFloat(result.wardrobe_score as string),
+            total: parseFloat(
+                (
+                    (parseInt(result.melody_score as string) +
+                        parseInt(result.performance_score as string) +
+                        parseInt(result.wardrobe_score as string)) /
+                    3
+                ).toFixed(2),
+            ),
+        },
+    };
+    final_results.push(tmp_result);
+}
+final_results.sort((a, b) => b.scores.total - a.scores.total);
+const best_melodies = Object.values(final_results).map( value => value).sort((a, b) => b.scores.melody - a.scores.melody);
+const best_wardrobes = Object.values(final_results).map( value => value).sort((a, b) => b.scores.wardrobe - a.scores.wardrobe);
+const best_performances = Object.values(final_results).map( value => value).sort((a, b) => b.scores.performance - a.scores.performance);
+
+
+
+
+// console.log("final_results", final_results);
+console.log("pippeli", best_melodies);
+// console.log("sort_by_melody", sort_by_melody);
+// console.log("sort_by_performance", sort_by_performance);
+// console.log("sort_by_wardrobe", sort_by_wardrobe);
+
+---
+
+<Layout title="Eurovision 24 homestudio">
+    <h1 class="text-2xl font-semibold mb-5">Tulokset</h1>
+
+    <div
+        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
+        <div class="font-semibold bg-slate-300">#</div>
+        <div class="font-semibold bg-slate-300">Artist</div>
+        <div class="font-semibold bg-slate-300">Song</div>
+        <div class="font-semibold bg-slate-300">Score</div>
+        {
+            final_results.map((result, index) => (
+                    <div class="border-b-2">{index + 1}</div>
+                    <div class="border-b-2">{result.Artist}</div>
+                    <div class="border-b-2">{result.Song}</div>
+                    <div class="border-b-2">{result.scores.total.toFixed(2)}</div>
+            ))
+        }
+    </div>
+
+    <h1 class="text-2xl font-semibold mb-5">Paras esitys:</h1>
+
+    <div
+        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
+        <div class="font-semibold bg-slate-300">#</div>
+        <div class="font-semibold bg-slate-300">Artist</div>
+        <div class="font-semibold bg-slate-300">Song</div>
+        <div class="font-semibold bg-slate-300">Score</div>
+        {
+            best_performances.map((score, index) => (
+                    <div class="border-b-2">{index + 1}</div>
+                    <div class="border-b-2">{score.Artist}</div>
+                    <div class="border-b-2">{score.Song}</div>
+                    <div class="border-b-2">{score.scores.performance.toFixed(2)}</div>
+            ))
+        }
+    </div>
+
+    <h1 class="text-2xl font-semibold mb-5">Paras melodia:</h1>
+
+    <div
+        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
+        <div class="font-semibold bg-slate-300">#</div>
+        <div class="font-semibold bg-slate-300">Artist</div>
+        <div class="font-semibold bg-slate-300">Song</div>
+        <div class="font-semibold bg-slate-300">Score</div>
+        {
+            best_melodies.map((score, index) => (
+                    <div class="border-b-2">{index + 1}</div>
+                    <div class="border-b-2">{score.Artist}</div>
+                    <div class="border-b-2">{score.Song}</div>
+                    <div class="border-b-2">{score.scores.melody.toFixed(2)}</div>
+            ))
+        }
+    </div>
+
+    <h1 class="text-2xl font-semibold mb-5">Paras asuste:</h1>
+
+    <div
+        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
+        <div class="font-semibold bg-slate-300">#</div>
+        <div class="font-semibold bg-slate-300">Artist</div>
+        <div class="font-semibold bg-slate-300">Song</div>
+        <div class="font-semibold bg-slate-300">Score</div>
+        {
+            best_wardrobes.map((score, index) => (
+                    <div class="border-b-2">{index + 1}</div>
+                    <div class="border-b-2">{score.Artist}</div>
+                    <div class="border-b-2">{score.Song}</div>
+                    <div class="border-b-2">{score.scores.wardrobe.toFixed(2)}</div>
+            ))
+        }
+    </div>
+
+
+</Layout>
+
+<style>
+    .results-table {
+        grid-template-columns: 1fr 3fr 3fr 1fr;
+    }
+</style>
