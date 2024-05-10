@@ -3,8 +3,7 @@ import { db, Users, Participants, Reviews } from 'astro:db';
 // https://astro.build/db/seed
 export default async function seed() {
 	await db.insert(Users).values([
-		{ username: "esu", password: "1234", profile_picture: 1, isAdmin: true },
-		{ username: "jensku", password: "1234", profile_picture: 1, isAdmin: false },
+		{ username: "admin", password: "1234", profile_picture: 1, isAdmin: true },
 	])
 	await db.insert(Participants).values([
 		{

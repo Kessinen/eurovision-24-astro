@@ -15,13 +15,16 @@ if (!result[0].isAdmin) {
   return Astro.redirect("/");
 }
 
+// Get userlist
+const users = await db.select().from(Users);
+
 if (Astro.request.method === "POST") {
   const data = await Astro.request.formData();
   const username = (data.get("username") as string).toLowerCase();
   const password = (data.get("username") as string).toLowerCase();
   // Check if user exists
   const result = await db.select().from(Users).where(eq(Users.username, username))
-  if (result.length < 0) {
+  if (result.length == 0) {
     const add_user = await db.insert(Users).values({
       username: username,
       password: username,
@@ -33,6 +36,16 @@ if (Astro.request.method === "POST") {
 
 <Layout title="Eurovision 24 homestudio">
   <h1 class="text-3xl font-bold mb-10">Admin panel</h1>
+  <div class="w-96 p-6 shadow-lg bg-white rounded-md mx-auto mb-10">
+    <h1 class="text-xl font-semibold mb-5">Current userlist</h1>
+    <ul>
+      {
+        users.map((user) => (
+          <li>{user.username}</li>
+        ))
+      }
+    </ul>
+  </div>
   <div class="w-96 p-6 shadow-lg bg-white rounded-md mx-auto">
     <form method="POST">
       <label for="username" class="block text-base mb-2">Käyttäjä</label>
