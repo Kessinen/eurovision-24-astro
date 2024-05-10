@@ -32,10 +32,10 @@ All commands are run from the root of the project, from a terminal:
 - [x] In partisipants view the review score should be selected when input field is focused.
 - [x] Goto participant listing after a review is given
 - [x] Results screen
-- [ ] Admin panel
-  - [ ] Add new user
+- [x] Admin panel
+  - [x] Add new user
   - [ ] Reset password (If time to implement)
 - [ ] New review score of stage. (If time to implement)
-- [ ] Code refactoring
+- [ ] Code refactoring (If time to implement)
   - [ ] Helper funtions to a separate file
 
