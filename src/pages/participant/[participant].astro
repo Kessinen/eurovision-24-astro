@@ -75,7 +75,7 @@ if (Astro.request.method === "POST") {
             wardrobe: parseInt(participant_score.wardrobe)
         }).where(eq(Reviews.participant_id, participant_id) && eq(Reviews.user_id, parseInt(data.get("user_id") as string)))
     }
-
+    return Astro.redirect("/participant_list");
 }
 
 ---
