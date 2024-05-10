@@ -10,7 +10,7 @@ Requires enviromental variables:
 
 | Variable | Description |
 | :------ | :--------- |
-| `API_URL` | Url for the Eurovision 24 api server. |
+| `ADMIN_PASSWORD` | Default password for the `admin` user. |
 
 ## 🧞 Commands
 
