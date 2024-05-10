@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Navbar from "../components/Navbar.astro";
+const logged_user = Astro.cookies.get("logged_user")?.value;
 ---
 
 <Layout title="Eurovision 24 homestudio">
@@ -8,5 +8,7 @@ import Navbar from "../components/Navbar.astro";
 	
 	<div><a href="/participant_list">Esiintyjät</a></div>
 	<div><a href="/results">Tuloksiin</a></div>
+
+	{logged_user && <div><a href="/user">Vaihda salasana</a></div>}
 
 </Layout>

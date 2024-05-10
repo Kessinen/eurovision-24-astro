@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { db, eq, and, Users } from "astro:db";
+
+import FormError from "../components/FormError.astro";
+
+// Check if user login
+const logged_user = Astro.cookies.get("logged_user");
+if (!logged_user) {
+    return Astro.redirect("/login");
+}
+
+// Get user data
+const user = await db
+    .select()
+    .from(Users)
+    .where(eq(Users.id, parseInt(logged_user.value as string)));
+
+const errors = {old_password: "", new_password: "", confirm_password: ""};
+let isErrors = false;
+if (Astro.request.method === "POST") {
+
+    const data = await Astro.request.formData();
+    const old_password = data.get("old_password") as string;
+    const new_password = data.get("new_password") as string;
+    const confirm_password = data.get("confirm_password") as string;
+    
+    // Check if old password is correct
+    if (old_password != user[0].password) {
+        errors.old_password = "Vanha salasana on väärin";
+        isErrors = true;
+    }
+    
+    if (new_password != confirm_password) {
+        errors.confirm_password = "Salasanat eivät ole samat";
+        isErrors = true;
+    }
+
+    if (!isErrors) {
+        console.log("updating password");
+        await db
+            .update(Users)
+            .set({password: new_password})
+            .where(eq(Users.id, parseInt(logged_user.value as string)));
+        return Astro.redirect("/");
+    }
+
+    
+}
+---
+
+<Layout title="Eurovision 24 homestudio">
+    <div class="w-96 p-6 shadow-lg bg-white rounded-md mx-auto">
+        <h1 class="text-3xl font-semibold mb-5">{user[0].username}</h1>
+        <form method="post">
+            <input type="hidden" name="user_id" value={logged_user.value} />
+            <label for="old_password" class="block text-base mb-2">Vanha salasana</label>
+            <input
+                type="password"
+                name="old_password"
+                class="w-full border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
+                placeholder="Vanha salasana"
+                required/>
+            {errors.old_password && <FormError error={errors.old_password}/>}
+            <label for="new_password" class="block text-base mb-2">Uusi salasana</label>
+            <input
+                type="password"
+                name="new_password"
+                class="w-full border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
+                placeholder="Uusi salasana"
+                required/>
+            <label for="confirm_password" class="block text-base mb-2">Vahvista uusi salasana</label>
+            <input
+                type="password"
+                name="confirm_password"
+                class="w-full border text-base px-2 py-1 focus:outline-none focus:ring-0 focus:border-gray-600"
+                placeholder="Vahvista uusi salasana"
+                required/>
+            {errors.confirm_password && <FormError error={errors.confirm_password}/>}
+            <button
+                type="submit"
+                class="border-2 border-indigo-700 bg-indigo-700 text-white px-2 py-1 w-full mt-5 rounded-md hover:bg-transparent hover:text-indigo-700 font-semibold">
+                Vaihda salasana
+            </button>
+
+        </form>
+    </div>
+
+</Layout>
+
+<style>
+
+</style>
