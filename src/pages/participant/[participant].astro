@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import ScoreSlider from "../../components/ScoreSlider.astro";
 
-import { db, like, eq, and, Participants, Reviews } from "astro:db";
+import { db, eq, and, Participants, Reviews } from "astro:db";
 
 const { participant } = Astro.params;
 
@@ -97,16 +97,16 @@ if (Astro.request.method === "POST") {
 
 <Layout title="Eurovision 24 homestudio">
   <div
-    class="w-96 p-6 shadow-2xl bg-slate-50 border-2 border-slate-200 rounded-md mx-auto">
-    <h1 class="text-3xl block text-center font-semibold mb-5 w-full">
+    class="w-96 p-3 shadow-2xl bg-slate-50 border-2 border-opacity-50 border-slate-200 rounded-md mx-auto bg-opacity-50 backdrop-blur-md">
+    <h1 class="text-3xl block text-center font-thin mb-2 w-full">
       {participant_data.country}
     </h1>
     <img
       src={participant_data.img}
       alt={participant_data.country}
-      class="border-2 rounded-xl border-slate-200 opacity-80"
+      class="border-2 rounded-xl border-slate-200 opacity-80 w-11/12 mx-auto"
     />
-    <div class="text-center py-5">
+    <div class="text-center py-3 text-base font-semibold">
       <p>{participant_data.name}</p><p>{participant_data.song}</p>
     </div>
 

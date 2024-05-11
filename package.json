@@ -1,7 +1,7 @@
 {
   "name": "eurovision-24-astro",
   "type": "module",
-  "version": "0.0.1",
+  "version": "B1.0.1",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

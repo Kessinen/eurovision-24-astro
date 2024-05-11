@@ -4,11 +4,38 @@ const logged_user = Astro.cookies.get("logged_user")?.value;
 ---
 
 <Layout title="Eurovision 24 homestudio">
-	<h1 class="text-2xl font-semibold mb-5">Tervetuloa kisaamaan</h1>
-	
-	<div><a href="/participant_list">Esiintyjät</a></div>
-	<div><a href="/results">Tuloksiin</a></div>
-
-	{logged_user && <div><a href="/user">Vaihda salasana</a></div>}
-
+  <h1 class="text-2xl font-semibold mb-5 text-center font-serif">
+    Tervetuloa kisaamaan
+  </h1>
+  <div class="text-center">
+    <p class="my-10">
+      <a
+        class="button"
+        href="/participant_list">Esiintyjät</a>
+    </p>
+    <p class="my-10">
+      <a
+        class="button"
+        href="/results">Tuloksiin</a>
+    </p>
+    {
+      logged_user && (
+        <div>
+          <p class="my-10">
+            <a
+              class="button"
+              href="/user">
+              Vaihda salasana
+            </a>
+          </p>
+        </div>
+      )
+    }
+  </div>
 </Layout>
+
+<style>
+	.button {
+    @apply px-8 py-3 rounded-lg bg-slate-200 bg-opacity-70 border-2 border-slate-400
+	}
+</style>

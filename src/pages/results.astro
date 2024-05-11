@@ -67,83 +67,105 @@ const best_performances = Object.values(final_results).map( value => value).sort
 ---
 
 <Layout title="Eurovision 24 homestudio">
-    <h1 class="text-2xl font-semibold mb-5">Tulokset</h1>
-
-    <div
-        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
-        <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Maa</div>
-        <div class="font-semibold bg-slate-300">Kappale</div>
-        <div class="font-semibold bg-slate-300">Tulos</div>
-        {
-            final_results.map((result, index) => (
-                    <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{result.Country}</div>
-                    <div class="border-b-2">{result.Artist} - {result.Song}</div>
-                    <div class="border-b-2">{result.scores.total.toFixed(2)}</div>
-            ))
-        }
+    <div class="table-container">
+        <h1 class="table-h1">Tulokset</h1>
+        <div
+            class="results-table">
+            <div class="table-header">#</div>
+            <div class="table-header">Maa</div>
+            <div class="table-header">Kappale</div>
+            <div class="table-header">Tulos</div>
+            {
+                final_results.map((result, index) => (
+                        <div class="table-row">{index + 1}</div>
+                        <div class="table-row">{result.Country}</div>
+                        <div class="table-row">{result.Artist} - {result.Song}</div>
+                        <div class="table-row">{result.scores.total.toFixed(2)}</div>
+                ))
+            }
+        </div>
     </div>
 
-    <h1 class="text-2xl font-semibold mb-5">Paras esitys:</h1>
+    <div class="table-container">
+        <h1 class="table-h1">Paras esitys:</h1>
 
-    <div
-        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
-        <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Maa</div>
-        <div class="font-semibold bg-slate-300">Kappale</div>
-        <div class="font-semibold bg-slate-300">Tulos</div>
-        {
-            best_performances.map((score, index) => (
-                    <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{score.Country}</div>
-                    <div class="border-b-2">{score.Artist} - {score.Song}</div>
-                    <div class="border-b-2">{score.scores.performance.toFixed(2)}</div>
-            ))
-        }
+        <div
+            class="results-table">
+            <div class="table-header">#</div>
+            <div class="table-header">Maa</div>
+            <div class="table-header">Kappale</div>
+            <div class="table-header">Tulos</div>
+            {
+                best_performances.map((score, index) => (
+                        <div class="table-row">{index + 1}</div>
+                        <div class="table-row">{score.Country}</div>
+                        <div class="table-row">{score.Artist} - {score.Song}</div>
+                        <div class="table-row">{score.scores.performance.toFixed(2)}</div>
+                ))
+            }
+        </div>
     </div>
+    <div class="table-container">
+        <h1 class="table-h1">Paras melodia:</h1>
 
-    <h1 class="text-2xl font-semibold mb-5">Paras melodia:</h1>
-
-    <div
-        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
-        <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Maa</div>
-        <div class="font-semibold bg-slate-300">Kappale</div>
-        <div class="font-semibold bg-slate-300">Tulos</div>
-        {
-            best_melodies.map((score, index) => (
-                    <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{score.Country}</div>
-                    <div class="border-b-2">{score.Artist} - {score.Song}</div>
-                    <div class="border-b-2">{score.scores.melody.toFixed(2)}</div>
-            ))
-        }
+        <div
+            class="results-table">
+            <div class="table-header">#</div>
+            <div class="table-header">Maa</div>
+            <div class="table-header">Kappale</div>
+            <div class="table-header">Tulos</div>
+            {
+                best_melodies.map((score, index) => (
+                        <div class="table-row">{index + 1}</div>
+                        <div class="table-row">{score.Country}</div>
+                        <div class="table-row">{score.Artist} - {score.Song}</div>
+                        <div class="table-row">{score.scores.melody.toFixed(2)}</div>
+                ))
+            }
+        </div>
     </div>
+    <div class="table-container">
+        <h1 class="table-h1">Paras asuste:</h1>
 
-    <h1 class="text-2xl font-semibold mb-5">Paras asuste:</h1>
-
-    <div
-        class="results-table grid grid-cols-4 mx-auto border-t-2 border-x-2 mx-4 rounded-md mb-10">
-        <div class="font-semibold bg-slate-300">#</div>
-        <div class="font-semibold bg-slate-300">Maa</div>
-        <div class="font-semibold bg-slate-300">Kappale</div>
-        <div class="font-semibold bg-slate-300">Tulos</div>
-        {
-            best_wardrobes.map((score, index) => (
-                    <div class="border-b-2">{index + 1}</div>
-                    <div class="border-b-2">{score.Country}</div>
-                    <div class="border-b-2">{score.Artist} - {score.Song}</div>
-                    <div class="border-b-2">{score.scores.wardrobe.toFixed(2)}</div>
-            ))
-        }
+        <div
+            class="results-table">
+            <div class="table-header">#</div>
+            <div class="table-header">Maa</div>
+            <div class="table-header">Kappale</div>
+            <div class="table-header">Tulos</div>
+            {
+                best_wardrobes.map((score, index) => (
+                        <div class="table-row">{index + 1}</div>
+                        <div class="table-row">{score.Country}</div>
+                        <div class="table-row">{score.Artist} - {score.Song}</div>
+                        <div class="table-row">{score.scores.wardrobe.toFixed(2)}</div>
+                ))
+            }
+        </div>
     </div>
-
 
 </Layout>
 
 <style>
     .results-table {
+        @apply grid grid-cols-4 mx-auto border-t-2 border-x-2 rounded-md text-sm;
         grid-template-columns: 1fr 2fr 4fr 1fr;
     }
+
+    .table-container {
+        @apply bg-slate-300 m-2 p-2 rounded-lg mb-10 bg-opacity-50 backdrop-blur-sm;
+    }
+
+    .table-header {
+        @apply font-semibold bg-slate-300 bg-opacity-50 py-2 px-1;
+    }
+
+    .table-h1 {
+        @apply text-2xl font-semibold mb-3 mt-2 text-center;
+    }
+
+    .table-row {
+        @apply border-b-2 bg-slate-100 bg-opacity-50 px-1 py-1;
+    }
+
 </style>

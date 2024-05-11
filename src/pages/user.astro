@@ -50,7 +50,7 @@ if (Astro.request.method === "POST") {
 ---
 
 <Layout title="Eurovision 24 homestudio">
-    <div class="w-96 p-6 shadow-lg bg-white rounded-md mx-auto">
+    <div class="w-96 p-6 shadow-lg bg-slate-100 rounded-md mx-auto bg-opacity-50 backdrop-blur-sm ">
         <h1 class="text-3xl font-semibold mb-5">{user[0].username}</h1>
         <form method="post">
             <input type="hidden" name="user_id" value={logged_user.value} />
