@@ -1,6 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 const logged_user = Astro.cookies.get("logged_user")?.value;
+
+if (!logged_user) {
+  return Astro.redirect("/login");
+}
 ---
 
 <Layout title="Eurovision 24 homestudio">
