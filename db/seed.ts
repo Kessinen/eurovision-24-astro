@@ -4,6 +4,7 @@ const admin_password = import.meta.env.ADMIN_PASSWORD || "admin";
 export default async function seed() {
 	await db.insert(Users).values([
 		{ username: "admin", password: admin_password, profile_picture: 1, isAdmin: true },
+		{ username: "ezu", password: "asd", profile_picture: 1, isAdmin: true },
 	])
 	await db.insert(Participants).values([
 		{

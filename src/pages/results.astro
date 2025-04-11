@@ -34,12 +34,12 @@ const results = await db
     })
     .from(Reviews)
     .groupBy(Reviews.participant_id);
-
+console.log(participants);
 let final_results = [];
 for (let i = 0; i < results.length; i++) {
     let result = results[i];
     const tmp_result = {
-        Artist: participants[result.Participant_id - 1].name,
+        Artist: participants[result.Participant_id].name,
         Country: participants[result.Participant_id - 1].country,
         Song: participants[result.Participant_id - 1].song,
         Image: participants[result.Participant_id - 1].country_img,

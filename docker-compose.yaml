@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  e24hs:
+    container_name: e24hs
+    build: https://github.com/Kessinen/eurovision-24-astro.git
+    command: node ./dist/server/entry.mjs --verbose
+    ports:
+      - 4321:4321
+    restart: unless-stopped
+    networks:
+      - pondenet-frontend
+    environment:
+      - HOST=0.0.0.0
+      - PORT=4321
+      - ASTRO_DATABASE_FILE=/data/astro.db
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ./data:/data/
+networks:
+  pondenet-frontend:
+    external: true
